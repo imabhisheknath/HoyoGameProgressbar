@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 
 public class ProgressDialogTheme {
@@ -22,12 +23,14 @@ public class ProgressDialogTheme {
     private boolean call_auto = false;
     receiveSecounds receiveSecounds;
     private boolean is_locationActive = false;
+    private boolean counttext = false;
 
 
     private onProgressDialogTimeoutListner progressListner;
 
-    public ProgressDialogTheme() {
+    public ProgressDialogTheme(receiveSecounds receiveSecounds) {
 
+        this.receiveSecounds = receiveSecounds;
     }
 
 
@@ -136,7 +139,18 @@ public class ProgressDialogTheme {
         this.countDownTimer = new CountDownTimer(counttime, 1000L) {
             public void onTick(long l) {
 
-                progressListner.secoundRemainngforCountDown(l/1000);
+                progressListner.secoundRemainngforCountDown(l / 1000);
+
+                Intent intent = new Intent();
+
+                if (counttext) {
+                    intent.putExtra("status", "yes");
+                } else {
+                    intent.putExtra("status", "no");
+                }
+                intent.putExtra("tym", l / 1000 + "");
+                intent.setAction("ActionB");
+                mContext.sendBroadcast(intent);
 
 
             }
@@ -163,6 +177,12 @@ public class ProgressDialogTheme {
             progressListner.onAllSet();
         }
     };
+
+
+    public void enableCountText() {
+        counttext = true;
+
+    }
 
 
 }

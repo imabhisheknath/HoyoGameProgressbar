@@ -2,7 +2,6 @@ package com.example.administrator.gameprocess;
 
 import android.app.Activity;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,7 @@ public class MainActivity extends Activity {
     ProgressDialogTheme progressDialog;
     DisplayCountDown displayCountDown;
     TextView tvTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
         progressDialog.setResponseListener(listner);
         progressDialog.setTimeOutTime(10000);
         progressDialog.setCountDownTime(5L);
+        progressDialog.enableCountText();
         //  progressDialog.callCountDownAutoMatically();
         progressDialog.start();
         final Handler handler = new Handler();
@@ -37,8 +38,6 @@ public class MainActivity extends Activity {
         }, 5000);
 
     }
-
-
 
 
     ProgressDialogTheme.onProgressDialogTimeoutListner listner = new ProgressDialogTheme.onProgressDialogTimeoutListner() {

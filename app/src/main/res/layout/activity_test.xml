@@ -10,8 +10,8 @@
     android:padding="50dp">
 
     <LinearLayout
-        android:layout_width="270dp"
-        android:layout_height="270dp"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
         android:layout_gravity="center"
         android:background="@drawable/circle"
         android:orientation="vertical"
@@ -21,13 +21,15 @@
 
         <TextView
             android:id="@+id/tvTime"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:textStyle="bold"
+            android:textSize="15dp"
             android:layout_gravity="right"
             android:layout_marginTop="10dp"
-            android:layout_weight="10"
+            android:layout_weight="20"
             android:gravity="right"
-            android:textColor="#fff"
+            android:textColor="@color/neon"
           />
 
         <com.example.administrator.gameprocess.GifView
@@ -36,7 +38,7 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_weight="70"
+            android:layout_weight="60"
             android:gravity="center"
             components:gif="@raw/runcartoon">
         </com.example.administrator.gameprocess.GifView>
