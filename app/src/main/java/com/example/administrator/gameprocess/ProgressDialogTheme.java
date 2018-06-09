@@ -139,18 +139,23 @@ public class ProgressDialogTheme {
         this.countDownTimer = new CountDownTimer(counttime, 1000L) {
             public void onTick(long l) {
 
-                progressListner.secoundRemainngforCountDown(l / 1000);
 
-                Intent intent = new Intent();
+                if(!is_execute){
+                    progressListner.secoundRemainngforCountDown(l / 1000);
 
-                if (counttext) {
-                    intent.putExtra("status", "yes");
-                } else {
-                    intent.putExtra("status", "no");
+                    Intent intent = new Intent();
+
+                    if (counttext) {
+                        intent.putExtra("status", "yes");
+                    } else {
+                        intent.putExtra("status", "no");
+                    }
+                    intent.putExtra("tym", l / 1000 + "");
+                    intent.setAction("ActionB");
+                    mContext.sendBroadcast(intent);
                 }
-                intent.putExtra("tym", l / 1000 + "");
-                intent.setAction("ActionB");
-                mContext.sendBroadcast(intent);
+
+
 
 
             }

@@ -22,9 +22,9 @@ public class MainActivity extends Activity {
         progressDialog = new ProgressDialogTheme(MainActivity.this);
         progressDialog.setResponseListener(listner);
         progressDialog.setTimeOutTime(10000);
-        progressDialog.setCountDownTime(5L);
+        // progressDialog.setCountDownTime(5L);
         progressDialog.enableCountText();
-        //  progressDialog.callCountDownAutoMatically();
+          progressDialog.callCountDownAutoMatically();
         progressDialog.start();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
             public void run() {
 
                 progressDialog.LocationSucess();
-                progressDialog.startCountDown();
+                //  progressDialog.startCountDown();
 
             }
         }, 5000);
@@ -56,6 +56,8 @@ public class MainActivity extends Activity {
 
         @Override
         public void onAllSet() {
+
+            Log.e("all set", "all sert");
 
             tvTitle.setVisibility(View.VISIBLE);
             tvTitle.setText("ready");
