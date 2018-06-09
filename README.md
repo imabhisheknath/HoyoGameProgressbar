@@ -60,14 +60,14 @@ progressDialog.LocationFailed();
         }
 
         @Override
-        public void onCancelbyLocationFailed() {
+        public void onCancel() {
 
             tvTitle.setText("cancel");
             //call when location fails
         }
 
         @Override
-        public void onAllSet() {
+        public void onSucess() {
         
         //called when all is ready
 
@@ -76,7 +76,7 @@ progressDialog.LocationFailed();
         }
 
         @Override
-        public void secoundRemainngforCountDown(long sec) {
+        public void secoundsForTimeout(long sec) {
             tvTitle.setText("s" + sec);
             Log.e("sec", "" + sec);
             
@@ -84,7 +84,7 @@ progressDialog.LocationFailed();
         }
 
         @Override
-        public void onInvalidCountdownStartdueToLocation() {
+        public void onForcingCountdownstart() {
             tvTitle.setText("invalid Location");
             
             

@@ -1,12 +1,13 @@
 package com.example.administrator.gameprocess;
 
-import android.content.BroadcastReceiver;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.widget.TextView;
 
 
 public class ProgressDialogTheme {
@@ -24,19 +25,10 @@ public class ProgressDialogTheme {
     receiveSecounds receiveSecounds;
     private boolean is_locationActive = false;
     private boolean counttext = false;
+    private boolean is_forces = true;
 
 
     private onProgressDialogTimeoutListner progressListner;
-
-    public ProgressDialogTheme(receiveSecounds receiveSecounds) {
-
-        this.receiveSecounds = receiveSecounds;
-    }
-
-
-    public void receivetime(receiveSecounds receiveSecounds) {
-        this.receiveSecounds = receiveSecounds;
-    }
 
 
     public void setTimeOutTime(int time) {
@@ -53,9 +45,10 @@ public class ProgressDialogTheme {
         if (is_locationActive) {
             enableCount();
         } else {
+            is_forces = true;
             is_execute = true;
             progressDialog.Dissmiss();
-            progressListner.onInvalidCountdownStartdueToLocation();
+            progressListner.onForcingCountdownstart();
         }
 
 
@@ -71,20 +64,21 @@ public class ProgressDialogTheme {
     public interface onProgressDialogTimeoutListner {
         void onTimeOut();
 
-        void onCancelbyLocationFailed();
+        void onCancel();
 
-        void onAllSet();
+        void onSucess();
 
-        void secoundRemainngforCountDown(long sec);
+        void secoundsForTimeout(long sec);
 
-        void onInvalidCountdownStartdueToLocation();
+        void onForcingCountdownstart();
     }
 
 
     public ProgressDialogTheme(@NonNull Context context) {
         mContext = context;
         progressDialog = new Progress(mContext);
-        mContext.registerReceiver(mNotificationReceiver, new IntentFilter("ActionA"));
+
+        this.receiveSecounds = progressDialog.receiveSecounds();
 
     }
 
@@ -95,7 +89,7 @@ public class ProgressDialogTheme {
     }
 
 
-    public void LocationSucess() {
+    public void preparaationDone() {
         if (!timed_out) {
             progressDialog.Dissmiss();
             is_locationActive = true;
@@ -103,7 +97,8 @@ public class ProgressDialogTheme {
             if (call_auto) {
                 enableCount();
             } else {
-                progressListner.onAllSet();
+                if(!is_forces)
+                progressListner.onSucess();
             }
 
 
@@ -115,47 +110,59 @@ public class ProgressDialogTheme {
     private void enableCount() {
 
 
-        Intent intent = new Intent(mContext, CountDownActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("time", String.valueOf(startCount));
-        mContext.startActivity(intent);
+        final Dialog dialog = new Dialog(mContext, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.progress_dialog);
 
+        TextView tvTitle = dialog.findViewById(R.id.tvTitle);
+
+
+        CountDownAnimation countDownAnimation = new CountDownAnimation(tvTitle, startCount);
+        countDownAnimation.start();
+        // Use scale animation
+        Animation scaleAnimation = new ScaleAnimation(1.0f, 0.0f, 1.0f, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        countDownAnimation.setAnimation(scaleAnimation);
+
+        countDownAnimation.setCountDownListener(new CountDownAnimation.CountDownListener() {
+            @Override
+            public void onCountDownEnd(CountDownAnimation animation) {
+
+
+                dialog.dismiss();
+                progressListner.onSucess();
+
+            }
+
+
+        });
+
+        dialog.show();
     }
 
 
-    public void LocationFailed() {
+    public void preparationFailed() {
         if (!timed_out) {
             progressDialog.Dissmiss();
             is_execute = true;
-            progressListner.onCancelbyLocationFailed();
+            progressListner.onCancel();
         }
 
 
     }
 
 
-    public void start() {
+    public void startProgressDialog() {
         progressDialog.Show();
+
         this.countDownTimer = new CountDownTimer(counttime, 1000L) {
             public void onTick(long l) {
 
-
-                if(!is_execute){
-                    progressListner.secoundRemainngforCountDown(l / 1000);
-
-                    Intent intent = new Intent();
-
-                    if (counttext) {
-                        intent.putExtra("status", "yes");
-                    } else {
-                        intent.putExtra("status", "no");
-                    }
-                    intent.putExtra("tym", l / 1000 + "");
-                    intent.setAction("ActionB");
-                    mContext.sendBroadcast(intent);
+                if (counttext && !is_execute) {
+                    receiveSecounds.receiveData(l / 1000);
+                    progressListner.secoundsForTimeout(l / 1000);
                 }
-
-
 
 
             }
@@ -174,14 +181,6 @@ public class ProgressDialogTheme {
 
 
     }
-
-
-    private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            progressListner.onAllSet();
-        }
-    };
 
 
     public void enableCountText() {

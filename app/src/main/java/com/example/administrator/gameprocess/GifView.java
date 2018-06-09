@@ -100,7 +100,7 @@ public class GifView extends View {
             this.mPaused = false;
 
             /**
-             * Calculate new movie start time, so that it resumes from the same
+             * Calculate new movie startProgressDialog time, so that it resumes from the same
              * frame.
              */
             mMovieStart = android.os.SystemClock.uptimeMillis() - mCurrentAnimationTime;

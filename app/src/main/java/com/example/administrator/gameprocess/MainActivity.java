@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
     ProgressDialogTheme progressDialog;
-    DisplayCountDown displayCountDown;
     TextView tvTitle;
 
     @Override
@@ -21,18 +20,21 @@ public class MainActivity extends Activity {
 
         progressDialog = new ProgressDialogTheme(MainActivity.this);
         progressDialog.setResponseListener(listner);
-        progressDialog.setTimeOutTime(10000);
+        progressDialog.setTimeOutTime(4000);
         // progressDialog.setCountDownTime(5L);
-        progressDialog.enableCountText();
-          progressDialog.callCountDownAutoMatically();
-        progressDialog.start();
+          progressDialog.enableCountText();
+         progressDialog.callCountDownAutoMatically();
+        progressDialog.startProgressDialog();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-                progressDialog.LocationSucess();
-                //  progressDialog.startCountDown();
+              //  progressDialog.preparaationDone();
+
+             //   progressDialog.startCountDown();
+                  progressDialog.preparationFailed();
+
 
             }
         }, 5000);
@@ -49,13 +51,13 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void onCancelbyLocationFailed() {
+        public void onCancel() {
 
             tvTitle.setText("cancel");
         }
 
         @Override
-        public void onAllSet() {
+        public void onSucess() {
 
             Log.e("all set", "all sert");
 
@@ -64,14 +66,16 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void secoundRemainngforCountDown(long sec) {
+        public void secoundsForTimeout(long sec) {
             tvTitle.setText("s" + sec);
             Log.e("sec", "" + sec);
         }
 
         @Override
-        public void onInvalidCountdownStartdueToLocation() {
+        public void onForcingCountdownstart() {
             tvTitle.setText("invalid Location");
+
+            Log.e("all set", "all Location");
         }
 
     };
