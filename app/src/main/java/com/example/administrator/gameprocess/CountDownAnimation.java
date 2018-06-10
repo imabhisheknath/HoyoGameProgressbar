@@ -4,25 +4,35 @@ package com.example.administrator.gameprocess;
  * Created by Administrator on 08-06-2018.
  */
 
+import android.content.Context;
 import android.os.Handler;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Defines a count down animation to be shown on a {@link TextView }.
  *
  * @author Ivan Ridao Freitas
  */
-public class CountDownAnimation {
+public class CountDownAnimation implements TextToSpeech.OnInitListener {
 
     private TextView mTextView;
     private Animation mAnimation;
     private long mStartCount;
     private long mCurrentCount;
     private CountDownListener mListener;
-    public String GO = "GO!!!";
+    public String GO = "go!!!!";
+    private TextToSpeech tts;
+    Context mContext;
+
+
+    boolean voice = true;
 
     private Handler mHandler = new Handler();
 
@@ -33,11 +43,16 @@ public class CountDownAnimation {
                 if (mCurrentCount == 1) {
                     mTextView.setText(GO);
                     mCurrentCount--;
+
                 } else {
+
                     mCurrentCount--;
                     mTextView.setText(mCurrentCount + "");
                     mTextView.startAnimation(mAnimation);
                 }
+
+                if (voice)
+                    speakOut(mTextView.getText().toString());
 
 
             } else {
@@ -46,7 +61,14 @@ public class CountDownAnimation {
                     mListener.onCountDownEnd(CountDownAnimation.this);
             }
         }
+
+
     };
+
+
+    private void speakOut(String s) {
+        tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+    }
 
     /**
      * <p>
@@ -61,9 +83,13 @@ public class CountDownAnimation {
      * @param textView   The view where the count down will be shown
      * @param startCount The starting count number
      */
-    public CountDownAnimation(TextView textView, long startCount) {
+    public CountDownAnimation(TextView textView, long startCount, Context context) {
+
         this.mTextView = textView;
         this.mStartCount = startCount;
+        this.mContext = context;
+
+        tts = new TextToSpeech(mContext, this);
 
         mAnimation = new AlphaAnimation(1.0f, 0.0f);
         mAnimation.setDuration(1000);
@@ -73,6 +99,9 @@ public class CountDownAnimation {
      * Starts the count down animation.
      */
     public void start() {
+
+
+        Log.e("startc", "start");
         mHandler.removeCallbacks(mCountDown);
 
         mTextView.setText(mStartCount + "");
@@ -82,6 +111,7 @@ public class CountDownAnimation {
 
         mHandler.post(mCountDown);
         for (int i = 1; i <= mStartCount; i++) {
+            Log.e("startc", "start2");
             mHandler.postDelayed(mCountDown, i * 1000);
         }
     }
@@ -139,6 +169,13 @@ public class CountDownAnimation {
         mListener = listener;
     }
 
+    @Override
+    public void onInit(int i) {
+
+        start();
+
+    }
+
     /**
      * A count down listener receives notifications from a count down animation.
      * Notifications indicate count down animation related events, such as the
@@ -152,4 +189,12 @@ public class CountDownAnimation {
          */
         void onCountDownEnd(CountDownAnimation animation);
     }
+
+
+    public void getStatus(boolean status) {
+
+        voice = status;
+    }
 }
+
+

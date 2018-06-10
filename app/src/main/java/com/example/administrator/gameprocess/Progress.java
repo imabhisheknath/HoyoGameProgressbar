@@ -6,16 +6,23 @@ package com.example.administrator.gameprocess;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.KeyboardShortcutGroup;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
 
-public class Progress extends Dialog {
+
+public class Progress extends Dialog implements TextToSpeech.OnInitListener {
     Dialog mDialog;
     GifView imgTest;
     Context context;
-    public static TextView tvTime;
+    public TextView tvTime;
+
 
     public receiveSecounds receiveSecounds;
 
@@ -35,6 +42,8 @@ public class Progress extends Dialog {
                 tvTime.setText(sec + "");
             }
         };
+
+
 
 
         mDialog.setContentView(R.layout.activity_test);
@@ -62,5 +71,21 @@ public class Progress extends Dialog {
 
     public receiveSecounds receiveSecounds() {
         return receiveSecounds;
+    }
+
+
+    @Override
+    public void onInit(int i) {
+
+    }
+
+    @Override
+    public void onProvideKeyboardShortcuts(List<KeyboardShortcutGroup> data, @Nullable Menu menu, int deviceId) {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

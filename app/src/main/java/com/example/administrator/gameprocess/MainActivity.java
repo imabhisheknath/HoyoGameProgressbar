@@ -20,20 +20,24 @@ public class MainActivity extends Activity {
 
         progressDialog = new ProgressDialogTheme(MainActivity.this);
         progressDialog.setResponseListener(listner);
-        progressDialog.setTimeOutTime(4000);
-        // progressDialog.setCountDownTime(5L);
-          progressDialog.enableCountText();
-         progressDialog.callCountDownAutoMatically();
+        progressDialog.setTimeOutTime(6000);
+        progressDialog.enableAutoCountDown();
+
+        // progressDialog.DisableVoice();
+
+        progressDialog.showTimeout();
         progressDialog.startProgressDialog();
+        progressDialog.enableAutoCountDown();
+
+        progressDialog.setCountDownTime(10L);
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-              //  progressDialog.preparaationDone();
-
-             //   progressDialog.startCountDown();
-                  progressDialog.preparationFailed();
+                progressDialog.Prepared();
+                progressDialog.startCountDown();
+                progressDialog.notPrepared();
 
 
             }

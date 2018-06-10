@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -26,6 +27,8 @@ public class ProgressDialogTheme {
     private boolean is_locationActive = false;
     private boolean counttext = false;
     private boolean is_forces = true;
+    private boolean enable_voice = true;
+    private boolean enableCount = true;
 
 
     private onProgressDialogTimeoutListner progressListner;
@@ -36,7 +39,7 @@ public class ProgressDialogTheme {
     }
 
 
-    public void callCountDownAutoMatically() {
+    public void enableAutoCountDown() {
         this.call_auto = true;
     }
 
@@ -89,16 +92,17 @@ public class ProgressDialogTheme {
     }
 
 
-    public void preparaationDone() {
+    public void Prepared() {
         if (!timed_out) {
+            is_forces = false;
             progressDialog.Dissmiss();
             is_locationActive = true;
             is_execute = true;
             if (call_auto) {
                 enableCount();
             } else {
-                if(!is_forces)
-                progressListner.onSucess();
+                if (!is_forces)
+                    progressListner.onSucess();
             }
 
 
@@ -108,41 +112,46 @@ public class ProgressDialogTheme {
     }
 
     private void enableCount() {
+        if (enableCount) {
+            final Dialog dialog = new Dialog(mContext, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.progress_dialog);
+
+            TextView tvTitle = dialog.findViewById(R.id.tvTitle);
 
 
-        final Dialog dialog = new Dialog(mContext, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.progress_dialog);
+            CountDownAnimation countDownAnimation = new CountDownAnimation(tvTitle, startCount, mContext);
+            countDownAnimation.getStatus(enable_voice);
+            // countDownAnimation.start();
+            enableCount = false;
 
-        TextView tvTitle = dialog.findViewById(R.id.tvTitle);
+            // Use scale animation
+            Animation scaleAnimation = new ScaleAnimation(1.0f, 0.0f, 1.0f, 0.0f,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            countDownAnimation.setAnimation(scaleAnimation);
 
-
-        CountDownAnimation countDownAnimation = new CountDownAnimation(tvTitle, startCount);
-        countDownAnimation.start();
-        // Use scale animation
-        Animation scaleAnimation = new ScaleAnimation(1.0f, 0.0f, 1.0f, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        countDownAnimation.setAnimation(scaleAnimation);
-
-        countDownAnimation.setCountDownListener(new CountDownAnimation.CountDownListener() {
-            @Override
-            public void onCountDownEnd(CountDownAnimation animation) {
+            countDownAnimation.setCountDownListener(new CountDownAnimation.CountDownListener() {
+                @Override
+                public void onCountDownEnd(CountDownAnimation animation) {
 
 
-                dialog.dismiss();
-                progressListner.onSucess();
+                    dialog.dismiss();
+                    progressListner.onSucess();
 
-            }
+                }
 
 
-        });
+            });
 
-        dialog.show();
+            dialog.show();
+        }
+
+
     }
 
 
-    public void preparationFailed() {
+    public void notPrepared() {
         if (!timed_out) {
             progressDialog.Dissmiss();
             is_execute = true;
@@ -183,9 +192,13 @@ public class ProgressDialogTheme {
     }
 
 
-    public void enableCountText() {
+    public void showTimeout() {
         counttext = true;
 
+    }
+
+    public void DisableVoice() {
+        this.enable_voice = false;
     }
 
 
