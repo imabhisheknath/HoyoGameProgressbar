@@ -19,7 +19,10 @@ How To Use
 
     //you can set time out  time
    progressDialog.setTimeOutTime(6000);
-
+   
+     //for disable voice   count down
+   progressDialog.DisableVoice();
+   
    //for unable count down animation 
    progressDialog.setCountDownTime(5L);;  //pass starting count
 
