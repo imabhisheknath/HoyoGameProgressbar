@@ -7,88 +7,80 @@ How To Use
 
 ```java 
 
-//Add to your module App
-  compile 'com.github.imabhisheknath:ProgressDialog:v1.0-beta'
+       //Add to your module App
+     implementation 'com.github.imabhisheknath:HoyoGameProgressbar:v1.5-beta'
   
   
-  //initialize the Progress Dialog
-  
- ProgressDialogTheme  progressDialog = new ProgressDialogTheme(Context);
+    //initialize the Progress Dialog
+   ProgressDialogTheme  progressDialog = new ProgressDialogTheme(Context);
 
-//set Listner for status monitor
- progressDialog.setResponseListener(listner);
+   //set Listner for status monitor
+   progressDialog.setResponseListener(listner);
 
-//you can set time out  time
-  progressDialog.setTimeOutTime(5000);
+    //you can set time out  time
+   progressDialog.setTimeOutTime(6000);
+   
+     //for disable voice   count down
+   progressDialog.DisableVoice();
+   
+   //for unable count down animation 
+   progressDialog.setCountDownTime(5L);;  //pass starting count
 
-
-
-//for unable count down animation 
- progressDialog.setCountDownTime(5L);;  //pass starting count
-
-  progressDialog.enableCountText();      //enable total time remaing which is present for textview
+  //enable time remaing for timeout
+   progressDialog.showTimeout();    
   
+   //call  countdown automatically
+  progressDialog.enableAutoCountDown();
   
-  progressDialog.callCountDownAutoMatically();  //call  countdown automatically
+    //for displaying call count down manually    //   progressDialog.Prepared(); must executed  
+   progressDialog.startCountDown();            
   
-  
-    progressDialog.startCountDown();            //call count down manually  location sucess call neccesarry before calling this
-  
-  
-  //for starting up 
+    //for starting up 
   progressDialog.start();
 
 
-//for receiving our Location Sucess Call
-progressDialog.LocationSucess();
+   //for all status and setting prepared
+ progressDialog.Prepared();
 
-// if Location Failed call
-progressDialog.LocationFailed();
-
-
+  //for any status or setting failed 
+progressDialog.notPrepared();
 
 
 
 // Monitor Status BY
-
- ProgressDialogTheme.onProgressDialogTimeoutListner listner = new ProgressDialogTheme.onProgressDialogTimeoutListner() {
+  ProgressDialogTheme.onProgressDialogTimeoutListner listner = new ProgressDialogTheme.onProgressDialogTimeoutListner() {
         @Override
         public void onTimeOut() {
-
-           //called when time out 
-            tvTitle.setText("timout");
+        
+        //trigger after countdown
         }
 
         @Override
         public void onCancel() {
 
-            tvTitle.setText("cancel");
-            //call when location fails
+           //trigger if  call  progressDialog.notPrepared();
         }
 
         @Override
         public void onSucess() {
-        
-        //called when all is ready
 
-            tvTitle.setVisibility(View.VISIBLE);
-            tvTitle.setText("ready");
+           //trigger when  progressDialog.Prepared();  and after countdown over if enable
+       
         }
 
         @Override
         public void secoundsForTimeout(long sec) {
-            tvTitle.setText("s" + sec);
-            Log.e("sec", "" + sec);
-            
-            //display remaing time
+           // getting secounds remaing for countdown
         }
 
         @Override
         public void onForcingCountdownstart() {
-            tvTitle.setText("invalid Location");
-            
-            
-            //when    progressDialog.startCountDown();   called before location sucess
+           
+           calling  forcefully     progressDialog.startCountDown(); 
+           
+           
+           
+           
         }
 
     };
