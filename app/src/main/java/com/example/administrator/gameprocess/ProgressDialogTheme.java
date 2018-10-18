@@ -134,11 +134,8 @@ public class ProgressDialogTheme {
             countDownAnimation.setCountDownListener(new CountDownAnimation.CountDownListener() {
                 @Override
                 public void onCountDownEnd(CountDownAnimation animation) {
-
-
                     dialog.dismiss();
                     progressListner.onSucess();
-
                 }
 
 

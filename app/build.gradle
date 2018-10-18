@@ -1,11 +1,11 @@
-//apply plugin: 'com.android.application'
+apply plugin: 'com.android.application'
 
-apply plugin: 'com.android.library'
+//apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
     defaultConfig {
-      // applicationId "com.example.administrator.gameprocess"
+       applicationId "com.example.administrator.gameprocess"
         minSdkVersion 22
         targetSdkVersion 26
         versionCode 1

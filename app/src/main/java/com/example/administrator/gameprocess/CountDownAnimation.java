@@ -5,6 +5,7 @@ package com.example.administrator.gameprocess;
  */
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -27,7 +28,7 @@ public class CountDownAnimation implements TextToSpeech.OnInitListener {
     private long mStartCount;
     private long mCurrentCount;
     private CountDownListener mListener;
-    public String GO = "go!!!!";
+    public String GO = "GO!";
     private TextToSpeech tts;
     Context mContext;
 
@@ -43,7 +44,6 @@ public class CountDownAnimation implements TextToSpeech.OnInitListener {
                 if (mCurrentCount == 1) {
                     mTextView.setText(GO);
                     mCurrentCount--;
-
                 } else {
 
                     mCurrentCount--;
@@ -52,13 +52,38 @@ public class CountDownAnimation implements TextToSpeech.OnInitListener {
                 }
 
                 if (voice)
-                    speakOut(mTextView.getText().toString());
+                    if(mTextView.getText().toString().startsWith("G")){
+                        speakOut("go");
+                    }else{
+                        speakOut(mTextView.getText().toString());
+                    }
 
-
+                
             } else {
-                mTextView.setVisibility(View.GONE);
-                if (mListener != null)
-                    mListener.onCountDownEnd(CountDownAnimation.this);
+                new CountDownTimer(5000, 1000) {
+
+                    @Override
+                    public void onTick(long l) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        mTextView.setVisibility(View.GONE);
+                        if (mCurrentCount == 0) {
+                            if (tts != null) {
+                                tts.stop();
+                                tts.shutdown();
+                            }
+                        }
+
+                        if (mListener != null)
+                            mListener.onCountDownEnd(CountDownAnimation.this);
+
+                    }
+                }.start();
+
+
             }
         }
 
@@ -99,8 +124,6 @@ public class CountDownAnimation implements TextToSpeech.OnInitListener {
      * Starts the count down animation.
      */
     public void start() {
-
-
         Log.e("startc", "start");
         mHandler.removeCallbacks(mCountDown);
 
@@ -121,7 +144,6 @@ public class CountDownAnimation implements TextToSpeech.OnInitListener {
      */
     public void cancel() {
         mHandler.removeCallbacks(mCountDown);
-
         mTextView.setText("");
         mTextView.setVisibility(View.GONE);
     }
@@ -174,6 +196,7 @@ public class CountDownAnimation implements TextToSpeech.OnInitListener {
 
         start();
 
+
     }
 
     /**
@@ -195,6 +218,8 @@ public class CountDownAnimation implements TextToSpeech.OnInitListener {
 
         voice = status;
     }
+
+
 }
 
 

@@ -22,14 +22,13 @@ public class MainActivity extends Activity {
         progressDialog.setResponseListener(listner);
         progressDialog.setTimeOutTime(6000);
         progressDialog.enableAutoCountDown();
-
         // progressDialog.DisableVoice();
 
         progressDialog.showTimeout();
         progressDialog.startProgressDialog();
-        progressDialog.enableAutoCountDown();
+   //     progressDialog.enableAutoCountDown();
 
-        progressDialog.setCountDownTime(10L);
+        //progressDialog.setCountDownTime(3L);
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -37,7 +36,7 @@ public class MainActivity extends Activity {
 
                 progressDialog.Prepared();
                 progressDialog.startCountDown();
-                progressDialog.notPrepared();
+               // progressDialog.notPrepared();
 
 
             }
@@ -83,5 +82,9 @@ public class MainActivity extends Activity {
         }
 
     };
+
+
+
+
 
 }

@@ -12,7 +12,7 @@ public class DisplayCountDown {
     private Context mContext;
     private CountDownTimer countDownTimer;
     private int counttime = 5000;
-    private String GO = "GO";
+    private String GO = "GO!";
 
 
     private onCountDownListner countListner;
