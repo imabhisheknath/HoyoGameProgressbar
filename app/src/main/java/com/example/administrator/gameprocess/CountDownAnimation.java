@@ -58,7 +58,7 @@ public class CountDownAnimation implements TextToSpeech.OnInitListener {
                         speakOut(mTextView.getText().toString());
                     }
 
-                
+
             } else {
                 new CountDownTimer(5000, 1000) {
 
